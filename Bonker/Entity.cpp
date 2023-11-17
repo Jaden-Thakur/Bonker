@@ -23,6 +23,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 #include "Entity.h"
+#include "Utility.h"
 
 
 const float GRAVITY = 1.0f;
@@ -38,19 +39,18 @@ Entity::Entity() {
     // TRANSFORMATIONS
     m_movement = glm::vec3(0.0f);
     m_speed = 0.0;
-    m_angle = 0.0;
     m_model_matrix = glm::mat4(1.0f);
 }
 
 Entity::~Entity() {
-    delete[] m_animation;
+    //delete[] m_animation;
 };
 
 void Entity::rotate(float angle) {
     //if ((m_angle + angle <= 90) || (m_angle + angle >= 270 && m_angle + angle <= 359)) {
-    this->m_model_matrix = glm::rotate(this->m_model_matrix, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
+    /*this->m_model_matrix = glm::rotate(this->m_model_matrix, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
     m_angle += angle;
-    LOG(angle);
+    LOG(angle);*/
     //} 
 };
 
@@ -58,47 +58,6 @@ void Entity::scale() {
     // scales model to current height and width, yes you have to set the height and width first Jaden was lazy
     m_model_matrix = glm::scale(m_model_matrix, glm::vec3(m_width, m_height, 1.0));
 }
-
-void Entity::accelerate(float delta_time) {
-    float amount_x = 0;
-    float amount_y = 0;
-
-    // choosing direction of acceleration and accelerating in that direction
-    if (0 <= m_angle && m_angle <= 90) {
-        amount_x = (m_angle / 90);
-        amount_y = 1 - amount_x;
-        m_acceleration.x -= amount_x * m_acceleration_rate;
-        m_acceleration.y += amount_y * m_acceleration_rate;
-    }
-    else if (90 < m_angle && m_angle <= 180) {
-        amount_y = ((m_angle - 90) / 90);
-        amount_x = 1 - amount_y;
-        m_acceleration.x -= amount_x * m_acceleration_rate;
-        m_acceleration.y -= amount_y * m_acceleration_rate;
-    }
-    else if (180 < m_angle && m_angle <= 270) {
-        amount_x = ((m_angle - 180) / 90);
-        amount_y = 1 - amount_x;
-        m_acceleration.x += amount_x * m_acceleration_rate;
-        m_acceleration.y -= amount_y * m_acceleration_rate;
-    }
-    else if (270 < m_angle && m_angle <= 359) {
-        amount_y = ((m_angle - 270) / 90);
-        amount_x = 1 - amount_y;
-        m_acceleration.x += amount_x * m_acceleration_rate;
-        m_acceleration.y += amount_y * m_acceleration_rate;
-    }
-
-    if (m_velocity.x > max_accel) {
-        m_velocity.x = max_accel;
-    }
-
-    if (m_velocity.y > max_accel) {
-        m_velocity.y = max_accel;
-    }
-
-
-};
 
 void Entity::activate() {
     this->m_is_active = true;

@@ -31,6 +31,7 @@
 #include "stb_image.h"
 #include <vector>
 #include "Entity.h"
+#include "Utility.h"
 #include "Map.h"
 #include "SDL_mixer.h"
 #include "cmath"
@@ -124,54 +125,7 @@ void initialise()
 
     // Platforms and Landing Zones
     GLuint platform_texture_id = Utility::load_texture(PLATFORM_FILEPATH);
-    GLuint landzone_texture_id = load_texture(LANDZONE_FILEPATH);
 
-    g_state.platforms = new Entity[PLATFORM_COUNT];
-    g_state.landzones = new Entity[LANDZONE_COUNT];
-
-
-    std::vector<int> platform_heights = { 11, 10, 9, 8, 7, 7, 8, 7, 7, 6, 6, 5, 5, 6, 6, 6, 7, 7, 8, 9, 10, 10, 9, 7, 5, 5, 6, 6, 7, 7, 5 };
-    int platform_count = 0;
-    int landzone_counter = 0;
-
-    std::vector<int> landzone_locations;
-    srand(time(0));
-    for (int i = 0; i < LANDZONE_COUNT; i++) {
-        randint = std::rand() % 31;
-        if (std::find(landzone_locations.begin(), landzone_locations.end(), randint) == landzone_locations.end()) {
-            landzone_locations.emplace_back(randint);
-        }
-        else {
-            i--;
-        }
-
-    }
-
-    // Create platforms
-    for (int j = 0; j < 31; j++) {
-        for (int i = 0; i < platform_heights[j]; i++)
-        {
-            bool found = std::find(landzone_locations.begin(), landzone_locations.end(), j) == landzone_locations.end();
-            if (landzone_counter != LANDZONE_COUNT && (i == platform_heights[j] - 1) && found) {
-                g_state.landzones[landzone_counter].m_texture_id = landzone_texture_id;
-                g_state.landzones[landzone_counter].set_position(glm::vec3(j - 15.0f, i - 10.0f, 0.0f));
-                g_state.landzones[landzone_counter].set_width(1.0f);
-                g_state.landzones[landzone_counter].scale();
-                g_state.landzones[landzone_counter].set_entity_type(LANDZONE);
-                g_state.landzones[landzone_counter].update(0.0f, g_state.player, NULL, NULL, 0);
-                landzone_counter++;
-            }
-            else {
-                g_state.platforms[platform_count].m_texture_id = platform_texture_id;
-                g_state.platforms[platform_count].set_entity_type(PLATFORM);
-                g_state.platforms[platform_count].set_position(glm::vec3(j - 15.0f, i - 10.0f, 0.0f));
-                g_state.platforms[platform_count].set_width(1.0f);
-                g_state.platforms[platform_count].scale();
-                g_state.platforms[platform_count].update(0.0f, g_state.player, NULL, NULL, 0);
-                platform_count++;
-            }
-        }
-    }
 
 
     // Player Stuff
@@ -181,26 +135,25 @@ void initialise()
     g_state.player->set_movement(glm::vec3(0.0f));
     g_state.player->set_speed(1.0f);
     g_state.player->set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
-    g_state.player->m_texture_id = load_texture(SPRITESHEET_FILEPATH);
+    g_state.player->m_texture_id = Utility::load_texture(SPRITESHEET_FILEPATH);
 
     // Flying
-    g_state.player->m_animation[0] = new int[1] {0};
-    g_state.player->m_animation[1] = new int[1] {1};
-    g_state.player->m_acceleration_rate = 0.75f;
+    /*g_state.player->m_animation[0] = new int[1] {0};
+    g_state.player->m_animation[1] = new int[1] {1};*/
     g_state.player->set_entity_type(PLAYER);
-    g_state.player->m_animation_index = 0;
+    /*g_state.player->m_animation_index = 0;
     g_state.player->m_animation_cols = 2;
-    g_state.player->m_animation_rows = 1;
-    g_state.player->m_animation_indices = g_state.player->m_animation[0];
+    g_state.player->m_animation_rows = 1;*/
+    //g_state.player->m_animation_indices = g_state.player->m_animation[0];
 
-    // UI
-    g_state.ui = new Entity();
-    g_state.ui->set_entity_type(UI);
-    g_state.ui->set_position(glm::vec3(0.0f, 0.0f, 0.0f));
-    g_state.ui->set_width(12.0f);
-    g_state.ui->set_height(6.0f);
-    g_state.ui->scale();
-    g_state.ui->deactivate();
+    //// UI
+    //g_state.ui = new Entity();
+    //g_state.ui->set_entity_type(ui);
+    //g_state.ui->set_position(glm::vec3(0.0f, 0.0f, 0.0f));
+    //g_state.ui->set_width(12.0f);
+    //g_state.ui->set_height(6.0f);
+    //g_state.ui->scale();
+    //g_state.ui->deactivate();
 
     // Needed stuff
     glEnable(GL_BLEND);
@@ -230,8 +183,6 @@ void process_input()
                 g_game_is_running = false;
                 break;
             case SDLK_SPACE:
-                // Accelerate
-                g_state.player->m_is_accelerating = true;
                 break;
             default:
                 break;
@@ -252,13 +203,6 @@ void process_input()
     if (key_state[SDL_SCANCODE_D])
     {
         g_state.player->rotate(-0.025);
-    }
-    if (key_state[SDL_SCANCODE_SPACE]) {
-        g_state.player->m_animation_indices = g_state.player->m_animation[1];
-        g_state.player->m_is_accelerating = true;
-    }
-    else if (!key_state[SDL_SCANCODE_SPACE]) {
-        g_state.player->m_animation_indices = g_state.player->m_animation[0];
     }
 
     // normalize movement
@@ -289,29 +233,11 @@ void update()
 
     while (delta_time >= FIXED_TIMESTEP)
     {
-        g_state.player->update(FIXED_TIMESTEP, g_state.player, g_state.platforms, g_state.landzones, PLATFORM_COUNT + LANDZONE_COUNT);
+        g_state.player->update(FIXED_TIMESTEP, g_state.player, g_state.map, PLATFORM_COUNT);
         delta_time -= FIXED_TIMESTEP;
     }
 
     g_accumulator = delta_time;
-
-
-    // Win and Lose States
-    if (g_state.player->m_landed) {
-        if (g_state.player->m_collided_bottom) {
-            go = true;
-            win = true;
-            g_state.player->m_landed = false;
-        }
-        else {
-            g_state.player->m_landed = false;
-            g_state.player->m_crashed = true;
-        }
-    }
-    else if (g_state.player->m_crashed) {
-        go = true;
-        g_state.player->m_crashed = false;
-    }
 
 
 }
@@ -323,25 +249,20 @@ void render()
     // deactivate all of the platforms and player on game over
     if (go) {
         g_state.player->deactivate();
-        for (int i = 0; i < PLATFORM_COUNT; i++) g_state.platforms[i].deactivate();
-        for (int i = 0; i < LANDZONE_COUNT; i++) g_state.landzones[i].deactivate();
     }
 
     // render everything except UI
     g_state.player->render(&g_program);
 
-    for (int i = 0; i < PLATFORM_COUNT; i++) g_state.platforms[i].render(&g_program);
-    for (int i = 0; i < LANDZONE_COUNT; i++) g_state.landzones[i].render(&g_program);
-
     // render UI elements based on win or lose
     if (win && go) {
         g_state.ui->activate();
-        g_state.ui->m_texture_id = load_texture(WIN_SCREEN);
+        g_state.ui->m_texture_id = Utility::load_texture(WIN_SCREEN);
         g_state.ui->render(&g_program);
     }
     else if (go && !win) {
         g_state.ui->activate();
-        g_state.ui->m_texture_id = load_texture(LOSE_SCREEN);
+        g_state.ui->m_texture_id = Utility::load_texture(LOSE_SCREEN);
         g_state.ui->render(&g_program);
     }
 
@@ -355,7 +276,7 @@ void shutdown()
 
     // delete everything 
     delete[] g_state.enemies;
-    delete[] g_state.platforms;
+    delete[] g_state.map;
     delete g_state.player;
 }
 
