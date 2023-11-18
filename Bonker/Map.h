@@ -31,6 +31,8 @@ private:
     float m_left_bound, m_right_bound, m_top_bound, m_bottom_bound;
 
 public:
+
+    int tile;
     Map(int width, int height, unsigned int* level_data, GLuint texture_id, float tile_size, int
         tile_count_x, int tile_count_y);
 
@@ -41,6 +43,7 @@ public:
     // Getters
     int const get_width()  const { return this->m_width; }
     int const get_height() const { return this->m_height; }
+    
 
     unsigned int* const get_level_data() const { return this->m_level_data; }
     GLuint        const get_texture_id() const { return this->m_texture_id; }

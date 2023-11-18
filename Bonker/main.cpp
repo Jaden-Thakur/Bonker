@@ -45,7 +45,7 @@ struct GameState
     Map* map;
     Entity* player;
     Entity* ui;
-    Entity* enemies;
+    Entity* enemies[3];
 };
 
 // Globals 
@@ -66,7 +66,10 @@ const char V_SHADER_PATH[] = "shaders/vertex_textured.glsl",
 F_SHADER_PATH[] = "shaders/fragment_textured.glsl";
 
 const float MILLISECONDS_IN_SECOND = 1000.0;
-const char SPRITESHEET_FILEPATH[] = "assets/Ship_Sprite_Sheet_2.png";
+const char PLAYER_SPRITESHEET_FILEPATH[] = "assets/Player_Spritesheet.png";
+const char SPIKY_SPRITESHEET_FILEPATH[] = "assets/Spiky_Spritesheet.png";
+const char JUMPY_SPRITESHEET_FILEPATH[] = "assets/Jumpy_Spritesheet.png";
+const char DASHY_SPRITESHEET_FILEPATH[] = "assets/Dashy_Spritesheet.png";
 const char MAP_FILEPATH[] = "assets/tileset.png";
 const char WIN_SCREEN[] = "assets/win.png";
 const char LOSE_SCREEN[] = "assets/game_over.png";
@@ -88,7 +91,6 @@ glm::mat4 g_view_matrix, g_projection_matrix;
 
 float g_previous_ticks = 0.0f;
 float g_accumulator = 0.0f;
-int randint;
 
 void initialise()
 {
@@ -126,9 +128,9 @@ void initialise()
     GLuint map_texture_id = Utility::load_texture(MAP_FILEPATH);
     unsigned int MAP_DATA[] =
     {
-        0, 6, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 3, 4, 5, 0, 0, 3, 4, 5, 0,
+        0, 6, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 3, 4, 5, 0, 0, 3, 4, 5,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
@@ -138,8 +140,9 @@ void initialise()
         2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
     };
 
-    g_state.map = new Map(MAP_WIDTH, MAP_HEIGHT, MAP_DATA, map_texture_id, 1.0f, 7, 1);
 
+   
+    g_state.map = new Map(MAP_WIDTH, MAP_HEIGHT, MAP_DATA, map_texture_id, 1.0f, 7, 1);
 
 
 
@@ -150,16 +153,71 @@ void initialise()
     g_state.player->set_movement(glm::vec3(0.0f));
     g_state.player->set_speed(1.0f);
     g_state.player->set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
-    g_state.player->m_texture_id = Utility::load_texture(SPRITESHEET_FILEPATH);
-
-    // Flying
-   /* g_state.player->m_animation[0] = new int[1] {0};
-    g_state.player->m_animation[1] = new int[1] {1};*/
+    g_state.player->m_texture_id = Utility::load_texture(PLAYER_SPRITESHEET_FILEPATH);
     g_state.player->set_entity_type(PLAYER);
-   /* g_state.player->m_animation_index = 0;
+    g_state.player->m_animation[g_state.player->LEFT] = new int[4] { 1, 3, 5, 7 };
+    g_state.player->m_animation[g_state.player->RIGHT] = new int[4] { 0, 2, 4, 6 };
+    g_state.player->m_animation_indices = g_state.player->m_animation[g_state.player->LEFT];
+    g_state.player->m_animation_time = 0.0f;
+    g_state.player->m_animation_frames = 4;
+    g_state.player->m_animation_index = 0;
     g_state.player->m_animation_cols = 2;
-    g_state.player->m_animation_rows = 1;
-    g_state.player->m_animation_indices = g_state.player->m_animation[0];*/
+    g_state.player->m_animation_rows = 4;
+
+    // Create Jumpy
+    g_state.enemies[0] = new Entity();
+    g_state.enemies[0]->set_position(glm::vec3(2.0f, 0.0f, 0.0f));
+    g_state.enemies[0]->set_movement(glm::vec3(0.0f));
+    g_state.enemies[0]->set_speed(1.0f);
+    g_state.enemies[0]->set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
+    g_state.enemies[0]->m_texture_id = Utility::load_texture(JUMPY_SPRITESHEET_FILEPATH);
+    g_state.enemies[0]->set_entity_type(ENEMY);
+    g_state.enemies[0]->set_enemy_type(JUMPY);
+    g_state.enemies[0]->m_animation[g_state.enemies[0]->LEFT] = new int[2] { 1, 3};
+    g_state.enemies[0]->m_animation[g_state.enemies[0]->RIGHT] = new int[2] { 0, 2};
+    g_state.enemies[0]->m_animation_indices = g_state.enemies[0]->m_animation[g_state.enemies[0]->LEFT];
+    g_state.enemies[0]->m_animation_time = 0.0f;
+    g_state.enemies[0]->m_animation_frames = 2;
+    g_state.enemies[0]->m_animation_index = 0;
+    g_state.enemies[0]->m_animation_cols = 2;
+    g_state.enemies[0]->m_animation_rows = 2;
+
+    // Create Dashy
+    g_state.enemies[1] = new Entity();
+    g_state.enemies[1]->set_position(glm::vec3(4.0f, 0.0f, 0.0f));
+    g_state.enemies[1]->set_movement(glm::vec3(0.0f));
+    g_state.enemies[1]->set_speed(1.0f);
+    g_state.enemies[1]->set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
+    g_state.enemies[1]->m_texture_id = Utility::load_texture(DASHY_SPRITESHEET_FILEPATH);
+    g_state.enemies[1]->set_entity_type(ENEMY);
+    g_state.enemies[1]->set_enemy_type(DASHY);
+    g_state.enemies[1]->m_animation[g_state.enemies[1]->LEFT] = new int[2] { 1, 3};
+    g_state.enemies[1]->m_animation[g_state.enemies[1]->RIGHT] = new int[2] { 0, 2};
+    g_state.enemies[1]->m_animation_indices = g_state.enemies[1]->m_animation[g_state.enemies[1]->LEFT];
+    g_state.enemies[1]->m_animation_time = 0.0f;
+    g_state.enemies[1]->m_animation_frames = 2;
+    g_state.enemies[1]->m_animation_index = 0;
+    g_state.enemies[1]->m_animation_cols = 2;
+    g_state.enemies[1]->m_animation_rows = 2;
+
+    // Create Spiky
+    g_state.enemies[2] = new Entity();
+    g_state.enemies[2]->set_position(glm::vec3(6.0f, 0.0f, 0.0f));
+    g_state.enemies[2]->set_movement(glm::vec3(0.0f));
+    g_state.enemies[2]->set_speed(1.0f);
+    g_state.enemies[2]->set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
+    g_state.enemies[2]->m_texture_id = Utility::load_texture(SPIKY_SPRITESHEET_FILEPATH);
+    g_state.enemies[2]->set_entity_type(ENEMY);
+    g_state.enemies[2]->set_enemy_type(SPIKY);
+    g_state.enemies[2]->m_animation[g_state.enemies[2]->LEFT] = new int[1] { 0};
+    g_state.enemies[2]->m_animation[g_state.enemies[2]->RIGHT] = new int[1] { 1};
+    g_state.enemies[2]->m_animation_indices = g_state.enemies[2]->m_animation[g_state.enemies[2]->LEFT];
+    g_state.enemies[2]->m_animation_time = 0.0f;
+    g_state.enemies[2]->m_animation_frames = 1;
+    g_state.enemies[2]->m_animation_index = 0;
+    g_state.enemies[2]->m_animation_cols = 2;
+    g_state.enemies[2]->m_animation_rows = 1;
+ 
 
     //// UI
     //g_state.ui = new Entity();
@@ -198,6 +256,10 @@ void process_input()
                 g_game_is_running = false;
                 break;
             case SDLK_SPACE:
+                if (g_state.player->m_collided_bottom)
+                {
+                    g_state.player->m_is_jumping = true;
+                }
                 break;
             default:
                 break;
@@ -208,17 +270,20 @@ void process_input()
     }
 
 
-    //// Holding Down Keys
-    //const Uint8* key_state = SDL_GetKeyboardState(NULL);
+    // Holding Down Keys
+    const Uint8* key_state = SDL_GetKeyboardState(NULL);
 
-    //if (key_state[SDL_SCANCODE_A])
-    //{
-    //    g_state.player->rotate(0.025);
-    //}
-    //if (key_state[SDL_SCANCODE_D])
-    //{
-    //    g_state.player->rotate(-0.025);
-    //}
+    if (key_state[SDL_SCANCODE_A])
+    {
+        g_state.player->move_left();
+        g_state.player->m_animation_indices = g_state.player->m_animation[g_state.player->LEFT];
+    }
+    if (key_state[SDL_SCANCODE_D])
+    {
+        g_state.player->move_right();
+        g_state.player->m_animation_indices = g_state.player->m_animation[g_state.player->RIGHT];
+    }
+
 
     // normalize movement
     if (glm::length(g_state.player->get_movement()) > 1.0f)
@@ -249,6 +314,9 @@ void update()
     while (delta_time >= FIXED_TIMESTEP)
     {
         g_state.player->update(FIXED_TIMESTEP, g_state.player, NULL, 0, g_state.map);
+        for (size_t i = 0; i < 3; i++) {
+            g_state.enemies[i]->update(FIXED_TIMESTEP, g_state.enemies[i], NULL, 0, g_state.map);
+        }
         delta_time -= FIXED_TIMESTEP;
     }
 
@@ -267,8 +335,15 @@ void render()
     }*/
 
     // render everything except UI
-    g_state.player->render(&g_program);
+
     g_state.map->render(&g_program);
+    g_state.player->render(&g_program);
+   
+    for (size_t i = 0; i < 3; i++) {
+        g_state.enemies[i]->render(&g_program);
+    }
+
+    
 
     //// render UI elements based on win or lose
     //if (win && go) {
@@ -292,8 +367,13 @@ void shutdown()
 
     // delete everything 
     delete[] g_state.enemies;
+    for (size_t i = 0; i < 3; i++) {
+        g_state.enemies[i] = nullptr;
+    }
     delete g_state.map;
+    g_state.map = nullptr;
     delete g_state.player;
+    g_state.player = nullptr;
 }
 
 // GAME LOOP

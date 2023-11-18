@@ -1,4 +1,5 @@
 #include "Map.h"
+#define LOG(argument) std::cout << argument << std::endl;
 
 Map::Map(int width, int height, unsigned int* level_data, GLuint texture_id, float tile_size, int tile_count_x, int tile_count_y)
 {
@@ -21,7 +22,6 @@ void Map::build()
     {
         for (int x = 0; x < m_width; x++) {
             int tile = m_level_data[y * m_width + x];
-
             if (tile == 0) continue;
 
             float u = (float)(tile % m_tile_count_x) / (float)m_tile_count_x;
@@ -87,12 +87,14 @@ bool Map::is_solid(glm::vec3 position, float* penetration_x, float* penetration_
     if (position.y > m_top_bound || position.y < m_bottom_bound) return false;
 
     int tile_x = floor((position.x + (m_tile_size / 2)) / m_tile_size);
-    int tile_y = -(ceil(position.y - (m_tile_size / 2))) / m_tile_size; // Our array counts up as Y goes down.
+    int tile_y = -(ceil(position.y - (m_tile_size / 2))) / m_tile_size;
+
 
     if (tile_x < 0 || tile_x >= m_width) return false;
     if (tile_y < 0 || tile_y >= m_height) return false;
 
-    int tile = m_level_data[tile_y * m_width + tile_x];
+    tile = m_level_data[(tile_y * m_width) + tile_x];
+
     if (tile == 0) return false;
 
     float tile_center_x = (tile_x * m_tile_size);
@@ -102,4 +104,5 @@ bool Map::is_solid(glm::vec3 position, float* penetration_x, float* penetration_
     *penetration_y = (m_tile_size / 2) - fabs(position.y - tile_center_y);
 
     return true;
+
 }

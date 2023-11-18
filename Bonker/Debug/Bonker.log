@@ -1,1 +1,3 @@
-﻿  Bonker.vcxproj -> C:\Users\drago\source\repos\Bonker\Bonker\Debug\Bonker.exe
+﻿  main.cpp
+C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(369,5): warning C4154: deletion of an array expression; conversion to pointer supplied
+  Bonker.vcxproj -> C:\Users\drago\source\repos\Bonker\Bonker\Debug\Bonker.exe
