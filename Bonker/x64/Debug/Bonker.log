@@ -1,128 +1,50 @@
-﻿  Entity.cpp
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(82,55): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(83,55): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(41,5): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(46,14): error C2065: 'm_animation': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(46,5): error C2541: 'delete': cannot delete objects that are not pointers
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(52,5): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(67,14): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(67,25): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(68,21): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(70,40): error C2065: 'm_acceleration_rate': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(71,40): error C2065: 'm_acceleration_rate': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(73,19): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(73,30): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(74,22): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(76,40): error C2065: 'm_acceleration_rate': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(77,40): error C2065: 'm_acceleration_rate': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(79,20): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(79,31): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(80,22): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(82,40): error C2065: 'm_acceleration_rate': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(83,40): error C2065: 'm_acceleration_rate': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(85,20): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(85,31): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(86,22): error C2065: 'm_angle': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(88,40): error C2065: 'm_acceleration_rate': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.cpp(89,40): error C2065: 'm_acceleration_rate': undeclared identifier
-  main.cpp
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(82,55): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(83,55): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(158,13): error C2039: 'platforms': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(159,13): error C2039: 'landzones': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(167,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(185,25): error C2039: 'landzones': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(186,25): error C2039: 'landzones': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(187,25): error C2039: 'landzones': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(188,25): error C2039: 'landzones': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(189,25): error C2039: 'landzones': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(189,69): error C2065: 'LANDZONE': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(190,25): error C2039: 'landzones': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(194,25): error C2039: 'platforms': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(195,25): error C2039: 'platforms': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(196,25): error C2039: 'platforms': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(197,25): error C2039: 'platforms': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(198,25): error C2039: 'platforms': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(199,25): error C2039: 'platforms': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(216,21): error C2039: 'm_animation': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(217,21): error C2039: 'm_animation': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(218,21): error C2039: 'm_acceleration_rate': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(223,59): error C2039: 'm_animation': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(227,33): error C2065: 'UI': undeclared identifier
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(263,33): error C2039: 'm_is_accelerating': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(279,32): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(283,33): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(286,63): error C2039: 'm_animation': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(287,25): error C2039: 'm_is_accelerating': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(290,63): error C2039: 'm_animation': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(321,72): error C2039: 'platforms': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(321,91): error C2039: 'landzones': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(321,23): error C2660: 'Entity::update': function does not take 3 arguments
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(61,7): message : see declaration of 'Entity::update'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(321,23): message : while trying to match the argument list '(float, Entity *, int)'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(329,25): error C2039: 'm_landed': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(333,29): error C2039: 'm_landed': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(336,29): error C2039: 'm_landed': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(337,29): error C2039: 'm_crashed': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(340,30): error C2039: 'm_crashed': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(342,25): error C2039: 'm_crashed': is not a member of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(5,7): message : see declaration of 'Entity'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(355,58): error C2039: 'platforms': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(356,58): error C2039: 'landzones': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(362,54): error C2039: 'platforms': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(363,54): error C2039: 'landzones': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(387,22): error C2039: 'platforms': is not a member of 'GameState'
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(43,8): message : see declaration of 'GameState'
-  Map.cpp
-  ShaderProgram.cpp
-  Utility.cpp
-C:\Users\drago\source\repos\Bonker\Bonker\Utility.cpp(94,14): error C2039: 'SetModelMatrix': is not a member of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\ShaderProgram.h(14,7): message : see declaration of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\Utility.cpp(95,27): error C2039: 'programID': is not a member of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\ShaderProgram.h(14,7): message : see declaration of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\Utility.cpp(97,36): error C2039: 'positionAttribute': is not a member of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\ShaderProgram.h(14,7): message : see declaration of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\Utility.cpp(98,40): error C2039: 'positionAttribute': is not a member of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\ShaderProgram.h(14,7): message : see declaration of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\Utility.cpp(99,36): error C2039: 'texCoordAttribute': is not a member of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\ShaderProgram.h(14,7): message : see declaration of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\Utility.cpp(100,40): error C2039: 'texCoordAttribute': is not a member of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\ShaderProgram.h(14,7): message : see declaration of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\Utility.cpp(105,41): error C2039: 'positionAttribute': is not a member of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\ShaderProgram.h(14,7): message : see declaration of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\Utility.cpp(106,41): error C2039: 'texCoordAttribute': is not a member of 'ShaderProgram'
-C:\Users\drago\source\repos\Bonker\Bonker\ShaderProgram.h(14,7): message : see declaration of 'ShaderProgram'
-  Generating Code...
+﻿  main.cpp
+C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(84,55): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(85,55): warning C4244: 'return': conversion from 'const float' to 'const int', possible loss of data
+C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(210,32): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(214,33): warning C4305: 'argument': truncation from 'double' to 'float'
+Entity.obj : error LNK2019: unresolved external symbol __imp___glewDisableVertexAttribArray referenced in function "public: void __cdecl Entity::draw_sprite_from_texture_atlas(class ShaderProgram *,unsigned int,int)" (?draw_sprite_from_texture_atlas@Entity@@QEAAXPEAVShaderProgram@@IH@Z)
+Map.obj : error LNK2001: unresolved external symbol __imp___glewDisableVertexAttribArray
+Utility.obj : error LNK2001: unresolved external symbol __imp___glewDisableVertexAttribArray
+Entity.obj : error LNK2019: unresolved external symbol __imp___glewEnableVertexAttribArray referenced in function "public: void __cdecl Entity::draw_sprite_from_texture_atlas(class ShaderProgram *,unsigned int,int)" (?draw_sprite_from_texture_atlas@Entity@@QEAAXPEAVShaderProgram@@IH@Z)
+Map.obj : error LNK2001: unresolved external symbol __imp___glewEnableVertexAttribArray
+Utility.obj : error LNK2001: unresolved external symbol __imp___glewEnableVertexAttribArray
+Entity.obj : error LNK2019: unresolved external symbol __imp___glewVertexAttribPointer referenced in function "public: void __cdecl Entity::draw_sprite_from_texture_atlas(class ShaderProgram *,unsigned int,int)" (?draw_sprite_from_texture_atlas@Entity@@QEAAXPEAVShaderProgram@@IH@Z)
+Map.obj : error LNK2001: unresolved external symbol __imp___glewVertexAttribPointer
+Utility.obj : error LNK2001: unresolved external symbol __imp___glewVertexAttribPointer
+main.obj : error LNK2019: unresolved external symbol __imp_glewInit referenced in function "void __cdecl initialise(void)" (?initialise@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol SDL_CreateWindow referenced in function "void __cdecl initialise(void)" (?initialise@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol SDL_GL_CreateContext referenced in function "void __cdecl initialise(void)" (?initialise@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol SDL_GL_MakeCurrent referenced in function "void __cdecl initialise(void)" (?initialise@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol SDL_GL_SwapWindow referenced in function "void __cdecl render(void)" (?render@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol SDL_GetKeyboardState referenced in function "void __cdecl process_input(void)" (?process_input@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol SDL_PollEvent referenced in function "void __cdecl process_input(void)" (?process_input@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol SDL_GetTicks referenced in function "void __cdecl update(void)" (?update@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol SDL_Init referenced in function "void __cdecl initialise(void)" (?initialise@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol SDL_Quit referenced in function "void __cdecl shutdown(void)" (?shutdown@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp___glewUseProgram referenced in function "void __cdecl initialise(void)" (?initialise@@YAXXZ)
+Map.obj : error LNK2001: unresolved external symbol __imp___glewUseProgram
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp___glewUseProgram
+Utility.obj : error LNK2001: unresolved external symbol __imp___glewUseProgram
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewAttachShader referenced in function "public: void __cdecl ShaderProgram::load(char const *,char const *)" (?load@ShaderProgram@@QEAAXPEBD0@Z)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewCompileShader referenced in function "private: unsigned int __cdecl ShaderProgram::load_shader_from_string(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?load_shader_from_string@ShaderProgram@@AEAAIAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewCreateProgram referenced in function "public: void __cdecl ShaderProgram::load(char const *,char const *)" (?load@ShaderProgram@@QEAAXPEBD0@Z)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewCreateShader referenced in function "private: unsigned int __cdecl ShaderProgram::load_shader_from_string(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?load_shader_from_string@ShaderProgram@@AEAAIAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewDeleteProgram referenced in function "private: void __cdecl ShaderProgram::cleanup(void)" (?cleanup@ShaderProgram@@AEAAXXZ)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewDeleteShader referenced in function "private: void __cdecl ShaderProgram::cleanup(void)" (?cleanup@ShaderProgram@@AEAAXXZ)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewGetAttribLocation referenced in function "public: void __cdecl ShaderProgram::load(char const *,char const *)" (?load@ShaderProgram@@QEAAXPEBD0@Z)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewGetProgramiv referenced in function "public: void __cdecl ShaderProgram::load(char const *,char const *)" (?load@ShaderProgram@@QEAAXPEBD0@Z)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewGetShaderInfoLog referenced in function "private: unsigned int __cdecl ShaderProgram::load_shader_from_string(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?load_shader_from_string@ShaderProgram@@AEAAIAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewGetShaderiv referenced in function "private: unsigned int __cdecl ShaderProgram::load_shader_from_string(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?load_shader_from_string@ShaderProgram@@AEAAIAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewGetUniformLocation referenced in function "public: void __cdecl ShaderProgram::load(char const *,char const *)" (?load@ShaderProgram@@QEAAXPEBD0@Z)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewLinkProgram referenced in function "public: void __cdecl ShaderProgram::load(char const *,char const *)" (?load@ShaderProgram@@QEAAXPEBD0@Z)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewShaderSource referenced in function "private: unsigned int __cdecl ShaderProgram::load_shader_from_string(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?load_shader_from_string@ShaderProgram@@AEAAIAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewUniform4f referenced in function "public: void __cdecl ShaderProgram::set_colour(float,float,float,float)" (?set_colour@ShaderProgram@@QEAAXMMMM@Z)
+ShaderProgram.obj : error LNK2019: unresolved external symbol __imp___glewUniformMatrix4fv referenced in function "public: void __cdecl ShaderProgram::set_model_matrix(struct glm::mat<4,4,float,0> const &)" (?set_model_matrix@ShaderProgram@@QEAAXAEBU?$mat@$03$03M$0A@@glm@@@Z)
+MSVCRTD.lib(exe_winmain.obj) : error LNK2019: unresolved external symbol WinMain referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
+C:\SDL\glew\lib\Release\Win32\glew32.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\SDL\SDL2\lib\x86\SDL2.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\SDL\SDL2\lib\x86\SDL2main.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\SDL\SDL2_image\lib\x86\SDL2_image.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\SDL\SDL2_mixer\lib\x86\SDL2_mixer.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\drago\source\repos\Bonker\Bonker\x64\Debug\Bonker.exe : fatal error LNK1120: 30 unresolved externals

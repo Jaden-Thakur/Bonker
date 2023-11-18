@@ -1,6 +1,7 @@
 enum EntityType { PLAYER, PLATFORM, ENEMY };
 enum EnemyType { FLOATER, SPIKY, CHASER };
 
+#include "Map.h"
 
 class Entity
 {
@@ -58,16 +59,17 @@ public:
 	~Entity();
 
 	void scale();
-	void update(float delta_time, Entity* player, Entity* collidatble_entities1, int collidable_entity_count);
+	void update(float delta_time, Entity* player, Entity* collidatble_entities1, int collidable_entity_count, Map* map);
 	void draw_sprite_from_texture_atlas(ShaderProgram* program, GLuint texture_id, int index);
 	void render(ShaderProgram* program);
 
 	bool const check_collision(Entity* collided_entity) const;
 	void const check_collision_y(Entity* collidable_entities, int collidable_entity_count);
 	void const check_collision_x(Entity*, int collidable_entity_count);
+	void const check_collision_y(Map* map);
+	void const check_collision_x(Map* map);
 
 	void rotate(float angle);
-	void accelerate(float delta_time);
 
 	void activate();
 	void deactivate();
