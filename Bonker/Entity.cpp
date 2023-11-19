@@ -67,7 +67,7 @@ void Entity::activate_ai(Entity* player, float delta_time)
     switch (m_enemy_type) 
     {
     case JUMPY:
-        if (glm::distance(m_position, player->get_position()) > 2.5) {
+        if (glm::distance(m_position, player->get_position()) > 10) {
             set_mode(PATROL);
             ai_patrol(delta_time);
         }
@@ -84,7 +84,7 @@ void Entity::activate_ai(Entity* player, float delta_time)
         break;
 
     case DASHY:
-        if (glm::distance(m_position, player->get_position()) > 2.5) {
+        if (glm::distance(m_position, player->get_position()) > 3) {
             set_mode(PATROL);
             ai_patrol(delta_time);
             m_speed = 0.5f;
@@ -92,7 +92,7 @@ void Entity::activate_ai(Entity* player, float delta_time)
         else {
             set_mode(AGGRO);
             ai_attack(player);
-            m_speed = 3.0f;
+            m_speed = player->m_speed;
         }
         break;
     }
@@ -103,11 +103,11 @@ void Entity::ai_attack(Entity* player) {
     case AGGRO:
         if (m_enemy_type == DASHY) {
             if (m_position.x > player->get_position().x + player->get_width()) {
-                m_movement = glm::vec3(-m_speed, 0.0f, 0.0f);
+                move_left();
                 m_animation_indices = m_animation[RIGHT];
             }
             else if (m_position.x < player->get_position().x - player->get_width()) {
-                m_movement = glm::vec3(m_speed, 0.0f, 0.0f);
+                move_right();
                 m_animation_indices = m_animation[LEFT];
             }
         }
@@ -115,21 +115,21 @@ void Entity::ai_attack(Entity* player) {
         if (m_enemy_type == JUMPY && m_collided_bottom) {
             m_is_jumping = true;
             if (m_position.x > player->get_position().x) {
-                m_movement = glm::vec3(-m_speed, 0.0f, 0.0f);
+                move_right();
                 m_animation_indices = m_animation[RIGHT];
             }
             else {
-                m_movement = glm::vec3(1.0f, 0.0f, 0.0f);
+                move_left();
                 m_animation_indices = m_animation[LEFT];
             }
         }
         else if (m_enemy_type == JUMPY && !m_collided_bottom) {
             if (m_position.x > player->get_position().x) {
-                m_movement = glm::vec3(-m_speed, 0.0f, 0.0f);
+                move_left();
                 m_animation_indices = m_animation[RIGHT];
             }
             else {
-                m_movement = glm::vec3(m_speed, 0.0f, 0.0f);
+                move_right();
                 m_animation_indices = m_animation[LEFT];
             }
         }
@@ -168,11 +168,11 @@ void Entity::ai_idle(float delta_time) {
    
         if (dir == 1) {
             m_animation_indices = m_animation[LEFT];
-            m_can_damage = false;
+            m_can_damage = true;
         }
         else {
             m_animation_indices = m_animation[RIGHT];
-            m_can_damage = true;
+            m_can_damage = false;
         }
 
         timer += 2 * delta_time;
@@ -235,14 +235,15 @@ void Entity::update(float delta_time, Entity* player, Entity* collidable_entitie
         m_velocity.y -= GRAVITY * delta_time;
 
 
-        m_position.y += m_velocity.y * delta_time;
-        check_collision_y(collidable_entities1, collidable_entity_count);
-        
-        check_collision_y(map);
-
         m_position.x += m_velocity.x * delta_time;
         check_collision_x(collidable_entities1, collidable_entity_count);
         check_collision_x(map);
+
+        m_position.y += m_velocity.y * delta_time;
+        check_collision_y(collidable_entities1, collidable_entity_count);
+        check_collision_y(map);
+
+        
 
         if (m_collided_bottom) {
             m_acceleration.x = 0;
@@ -271,16 +272,17 @@ void const Entity::check_collision_y(Entity* collidable_entities, int collidable
                 m_position.y -= y_overlap;
                 m_velocity.y = 0;
                 m_collided_top = true;
-                if (collidable_entity->get_entity_type() == ENEMY && collidable_entity->m_can_damage) {
-                    dead = true;
-                }
+                dead = true;
             }
             else if (m_velocity.y < 0) {
                 m_position.y += y_overlap;
                 m_velocity.y = 0;
-                m_collided_bottom = true;
-                if (collidable_entity->get_entity_type() == ENEMY && collidable_entity->m_can_damage) {
+                m_collided_entity_bottom = true;
+                if (!m_collided_right && !m_collided_left && m_collided_entity_bottom && collidable_entity->m_can_damage) {
                     collidable_entity->deactivate();
+                }
+                else {
+                    dead = true;
                 }
             }
 
@@ -304,19 +306,16 @@ void const Entity::check_collision_x(Entity* collidable_entities, int collidable
                 m_position.x -= x_overlap;
                 m_velocity.x = 0;
                 m_collided_right = true;
-                if (collidable_entity->get_entity_type() == ENEMY && collidable_entity->m_can_damage) {
-                    dead = true;
-                }
+                
             }
             else if (m_velocity.x < 0) {
                 m_position.x += x_overlap;
                 m_velocity.x = 0;
                 m_collided_left = true;
-                if (collidable_entity->get_entity_type() == ENEMY && collidable_entity->m_can_damage) {
-                    dead = true;
-                }
+                
             }
-  
+            
+            dead = true;
 
         }
 
@@ -396,12 +395,14 @@ void const Entity::check_collision_x(Map* map)
 
     if (map->is_solid(left, &penetration_x, &penetration_y) && m_velocity.x < 0)
     {
+        LOG("colliding left");
         m_position.x += penetration_x;
         m_velocity.x = 0;
         m_collided_left = true;
     }
     if (map->is_solid(right, &penetration_x, &penetration_y) && m_velocity.x > 0)
     {
+        LOG("colliding right");
         m_position.x -= penetration_x;
         m_velocity.x = 0;
         m_collided_right = true;

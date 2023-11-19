@@ -76,6 +76,7 @@ public:
 	bool m_collided_bottom = false;
 	bool m_collided_left = false;
 	bool m_collided_right = false;
+	bool m_collided_entity_bottom = false;
 
 	// TEXTURE
 	GLuint m_texture_id;

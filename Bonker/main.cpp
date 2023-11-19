@@ -1,7 +1,7 @@
 /**
 * Author: Jaden Thakur
-* Assignment: Lunar Lander
-* Date due: 2023-11-08, 11:59pm
+* Assignment: Rise of the AI
+* Date due: 2023-11-18, 11:59pm
 * I pledge that I have completed this assignment without
 * collaborating with anyone else, in conformance with the
 * NYU School of Engineering Policies and Procedures on
@@ -74,7 +74,6 @@ const char MAP_FILEPATH[] = "assets/tileset.png";
 const char font_texture[] = "assets/font.png";
 
 GLuint font_texture_id;
-glm::mat4 ui_element_matrix;
 glm::vec3 ui_element_position = glm::vec3(3.0f, -5.0f, 0.0f);
 
 const int NUMBER_OF_TEXTURES = 1;
@@ -104,9 +103,7 @@ void initialise()
         WINDOW_WIDTH, WINDOW_HEIGHT,
         SDL_WINDOW_OPENGL);
 
-    ui_element_matrix = glm::mat4(1.0f);
     font_texture_id = Utility::load_texture(font_texture);
-    ui_element_matrix = glm::translate(ui_element_matrix, ui_element_position);
 
     SDL_GLContext context = SDL_GL_CreateContext(g_display_window);
     SDL_GL_MakeCurrent(g_display_window, context);
@@ -121,7 +118,7 @@ void initialise()
     g_program.load(V_SHADER_PATH, F_SHADER_PATH);
 
     g_view_matrix = glm::mat4(1.0f);
-    g_projection_matrix = glm::ortho(0.5f, 9.5f, -9.5f, 0.5f, -1.0f, 1.0f);
+    g_projection_matrix = glm::ortho(0.5f, 10.5f, -9.5f, 0.5f, -1.0f, 1.0f);
 
     g_program.set_projection_matrix(g_projection_matrix);
     g_program.set_view_matrix(g_view_matrix);
@@ -177,7 +174,7 @@ void initialise()
     g_state.enemies = new Entity[3];
 
     // Create Jumpy
-    g_state.enemies[0].set_position(glm::vec3(3.0f, 0.0f, 0.0f));
+    g_state.enemies[0].set_position(glm::vec3(8.0f, 0.0f, 0.0f));
     g_state.enemies[0].set_movement(glm::vec3(0.0f));
     g_state.enemies[0].set_speed(0.5f);
     g_state.enemies[0].set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
@@ -212,7 +209,7 @@ void initialise()
     g_state.enemies[1].m_animation_rows = 2;
 
     // Create Spiky
-    g_state.enemies[2].set_position(glm::vec3(7.0f, 0.0f, 0.0f));
+    g_state.enemies[2].set_position(glm::vec3(3.0f, 0.0f, 0.0f));
     g_state.enemies[2].set_movement(glm::vec3(0.0f));
     g_state.enemies[2].set_speed(0.0f);
     g_state.enemies[2].set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
@@ -228,15 +225,6 @@ void initialise()
     g_state.enemies[2].m_animation_cols = 2;
     g_state.enemies[2].m_animation_rows = 1;
  
-
-    //// UI
-    //g_state.ui = new Entity();
-    //g_state.ui->set_entity_type(ui);
-    //g_state.ui->set_position(glm::vec3(0.0f, 0.0f, 0.0f));
-    //g_state.ui->set_width(12.0f);
-    //g_state.ui->set_height(6.0f);
-    //g_state.ui->scale();
-    //g_state.ui->deactivate();
 
     // Needed stuff
     glEnable(GL_BLEND);
@@ -359,7 +347,6 @@ void render()
     // deactivate all of the platforms and player on game over
     if (go) {
         g_state.player->deactivate();
-        
     }
 
     // render everything except UI
@@ -375,7 +362,7 @@ void render()
 
     
 
-    // render UI elements based on win or lose
+    // render UI element based on win or lose
     if (win && go) {
         endscreen_text = "You Won!";
         Utility::draw_text(&g_program, font_texture_id, endscreen_text, 0.5f, 0.000001f, ui_element_position);
