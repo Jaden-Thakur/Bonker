@@ -14,7 +14,7 @@
 #define GL_GLEXT_PROTOTYPES 1
 #define LOG(argument) std::cout << argument << std::endl;
 #define FIXED_TIMESTEP 0.0166666f
-#define MAP_WIDTH 10
+#define MAP_WIDTH 12
 #define MAP_HEIGHT 10
 
 #ifdef _WINDOWS
@@ -45,7 +45,7 @@ struct GameState
     Map* map;
     Entity* player;
     Entity* ui;
-    Entity* enemies[3];
+    Entity* enemies;
 };
 
 // Globals 
@@ -71,8 +71,11 @@ const char SPIKY_SPRITESHEET_FILEPATH[] = "assets/Spiky_Spritesheet.png";
 const char JUMPY_SPRITESHEET_FILEPATH[] = "assets/Jumpy_Spritesheet.png";
 const char DASHY_SPRITESHEET_FILEPATH[] = "assets/Dashy_Spritesheet.png";
 const char MAP_FILEPATH[] = "assets/tileset.png";
-const char WIN_SCREEN[] = "assets/win.png";
-const char LOSE_SCREEN[] = "assets/game_over.png";
+const char font_texture[] = "assets/font.png";
+
+GLuint font_texture_id;
+glm::mat4 ui_element_matrix;
+glm::vec3 ui_element_position = glm::vec3(3.0f, -5.0f, 0.0f);
 
 const int NUMBER_OF_TEXTURES = 1;
 const GLint LEVEL_OF_DETAIL = 0;
@@ -85,6 +88,7 @@ SDL_Window* g_display_window;
 bool go = false;
 bool win = false;
 bool g_game_is_running = true;
+std::string endscreen_text;
 
 ShaderProgram g_program;
 glm::mat4 g_view_matrix, g_projection_matrix;
@@ -100,6 +104,10 @@ void initialise()
         WINDOW_WIDTH, WINDOW_HEIGHT,
         SDL_WINDOW_OPENGL);
 
+    ui_element_matrix = glm::mat4(1.0f);
+    font_texture_id = Utility::load_texture(font_texture);
+    ui_element_matrix = glm::translate(ui_element_matrix, ui_element_position);
+
     SDL_GLContext context = SDL_GL_CreateContext(g_display_window);
     SDL_GL_MakeCurrent(g_display_window, context);
 
@@ -113,7 +121,7 @@ void initialise()
     g_program.load(V_SHADER_PATH, F_SHADER_PATH);
 
     g_view_matrix = glm::mat4(1.0f);
-    g_projection_matrix = glm::ortho(-0.5f, 9.5f, -9.5f, 0.5f, -1.0f, 1.0f);
+    g_projection_matrix = glm::ortho(0.5f, 9.5f, -9.5f, 0.5f, -1.0f, 1.0f);
 
     g_program.set_projection_matrix(g_projection_matrix);
     g_program.set_view_matrix(g_view_matrix);
@@ -128,16 +136,17 @@ void initialise()
     GLuint map_texture_id = Utility::load_texture(MAP_FILEPATH);
     unsigned int MAP_DATA[] =
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 6, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 3, 4, 5, 0, 0, 3, 4, 5,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
-        1, 1, 1, 1, 1, 1, 1, 2, 2, 1,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+        2, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+        2, 0, 0, 3, 4, 5, 0, 0, 3, 4, 5, 2,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+        2, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 2,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+        2, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 2,
+        2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
     };
 
 
@@ -149,7 +158,7 @@ void initialise()
     // Player Stuff
     // Create Player
     g_state.player = new Entity();
-    g_state.player->set_position(glm::vec3(0.0f, 0.0f, 0.0f));
+    g_state.player->set_position(glm::vec3(1.0f, 0.0f, 0.0f));
     g_state.player->set_movement(glm::vec3(0.0f));
     g_state.player->set_speed(3.0f);
     g_state.player->set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
@@ -164,59 +173,60 @@ void initialise()
     g_state.player->m_animation_cols = 2;
     g_state.player->m_animation_rows = 4;
 
+
+    g_state.enemies = new Entity[3];
+
     // Create Jumpy
-    g_state.enemies[0] = new Entity();
-    g_state.enemies[0]->set_position(glm::vec3(2.0f, 0.0f, 0.0f));
-    g_state.enemies[0]->set_movement(glm::vec3(0.0f));
-    g_state.enemies[0]->set_speed(0.5f);
-    g_state.enemies[0]->set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
-    g_state.enemies[0]->m_texture_id = Utility::load_texture(JUMPY_SPRITESHEET_FILEPATH);
-    g_state.enemies[0]->set_entity_type(ENEMY);
-    g_state.enemies[0]->set_enemy_type(JUMPY);
-    g_state.enemies[0]->m_animation[g_state.enemies[0]->LEFT] = new int[2] { 1, 3};
-    g_state.enemies[0]->m_animation[g_state.enemies[0]->RIGHT] = new int[2] { 0, 2};
-    g_state.enemies[0]->m_animation_indices = g_state.enemies[0]->m_animation[g_state.enemies[0]->LEFT];
-    g_state.enemies[0]->m_animation_time = 0.0f;
-    g_state.enemies[0]->m_animation_frames = 2;
-    g_state.enemies[0]->m_animation_index = 0;
-    g_state.enemies[0]->m_animation_cols = 2;
-    g_state.enemies[0]->m_animation_rows = 2;
+    g_state.enemies[0].set_position(glm::vec3(3.0f, 0.0f, 0.0f));
+    g_state.enemies[0].set_movement(glm::vec3(0.0f));
+    g_state.enemies[0].set_speed(0.5f);
+    g_state.enemies[0].set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
+    g_state.enemies[0].m_texture_id = Utility::load_texture(JUMPY_SPRITESHEET_FILEPATH);
+    g_state.enemies[0].set_entity_type(ENEMY);
+    g_state.enemies[0].set_enemy_type(JUMPY);
+    g_state.enemies[0].m_animation[g_state.enemies[0].LEFT] = new int[2] { 1, 3};
+    g_state.enemies[0].m_animation[g_state.enemies[0].RIGHT] = new int[2] { 0, 2};
+    g_state.enemies[0].m_animation_indices = g_state.enemies[0].m_animation[g_state.enemies[0].LEFT];
+    g_state.enemies[0].m_animation_time = 0.0f;
+    g_state.enemies[0].m_animation_frames = 2;
+    g_state.enemies[0].m_animation_index = 0;
+    g_state.enemies[0].m_animation_cols = 2;
+    g_state.enemies[0].m_animation_rows = 2;
 
     // Create Dashy
-    g_state.enemies[1] = new Entity();
-    g_state.enemies[1]->set_position(glm::vec3(4.0f, 0.0f, 0.0f));
-    g_state.enemies[1]->set_movement(glm::vec3(0.0f));
-    g_state.enemies[1]->set_speed(0.5f);
-    g_state.enemies[1]->set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
-    g_state.enemies[1]->m_texture_id = Utility::load_texture(DASHY_SPRITESHEET_FILEPATH);
-    g_state.enemies[1]->set_entity_type(ENEMY);
-    g_state.enemies[1]->set_enemy_type(DASHY);
-    g_state.enemies[1]->m_animation[g_state.enemies[1]->LEFT] = new int[2] { 1, 3};
-    g_state.enemies[1]->m_animation[g_state.enemies[1]->RIGHT] = new int[2] { 0, 2};
-    g_state.enemies[1]->m_animation_indices = g_state.enemies[1]->m_animation[g_state.enemies[1]->LEFT];
-    g_state.enemies[1]->m_animation_time = 0.0f;
-    g_state.enemies[1]->m_animation_frames = 2;
-    g_state.enemies[1]->m_animation_index = 0;
-    g_state.enemies[1]->m_animation_cols = 2;
-    g_state.enemies[1]->m_animation_rows = 2;
+
+    g_state.enemies[1].set_position(glm::vec3(5.0f, 0.0f, 0.0f));
+    g_state.enemies[1].set_movement(glm::vec3(0.0f));
+    g_state.enemies[1].set_speed(0.5f);
+    g_state.enemies[1].set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
+    g_state.enemies[1].m_texture_id = Utility::load_texture(DASHY_SPRITESHEET_FILEPATH);
+    g_state.enemies[1].set_entity_type(ENEMY);
+    g_state.enemies[1].set_enemy_type(DASHY);
+    g_state.enemies[1].m_animation[g_state.enemies[1].LEFT] = new int[2] { 1, 3};
+    g_state.enemies[1].m_animation[g_state.enemies[1].RIGHT] = new int[2] { 0, 2};
+    g_state.enemies[1].m_animation_indices = g_state.enemies[1].m_animation[g_state.enemies[1].LEFT];
+    g_state.enemies[1].m_animation_time = 0.0f;
+    g_state.enemies[1].m_animation_frames = 2;
+    g_state.enemies[1].m_animation_index = 0;
+    g_state.enemies[1].m_animation_cols = 2;
+    g_state.enemies[1].m_animation_rows = 2;
 
     // Create Spiky
-    g_state.enemies[2] = new Entity();
-    g_state.enemies[2]->set_position(glm::vec3(6.0f, 0.0f, 0.0f));
-    g_state.enemies[2]->set_movement(glm::vec3(0.0f));
-    g_state.enemies[2]->set_speed(0.0f);
-    g_state.enemies[2]->set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
-    g_state.enemies[2]->m_texture_id = Utility::load_texture(SPIKY_SPRITESHEET_FILEPATH);
-    g_state.enemies[2]->set_entity_type(ENEMY);
-    g_state.enemies[2]->set_enemy_type(SPIKY);
-    g_state.enemies[2]->m_animation[g_state.enemies[2]->LEFT] = new int[1] {0};
-    g_state.enemies[2]->m_animation[g_state.enemies[2]->RIGHT] = new int[1] {1};
-    g_state.enemies[2]->m_animation_indices = g_state.enemies[2]->m_animation[g_state.enemies[2]->LEFT];
-    g_state.enemies[2]->m_animation_time = 0.0f;
-    g_state.enemies[2]->m_animation_frames = 1;
-    g_state.enemies[2]->m_animation_index = 0;
-    g_state.enemies[2]->m_animation_cols = 2;
-    g_state.enemies[2]->m_animation_rows = 1;
+    g_state.enemies[2].set_position(glm::vec3(7.0f, 0.0f, 0.0f));
+    g_state.enemies[2].set_movement(glm::vec3(0.0f));
+    g_state.enemies[2].set_speed(0.0f);
+    g_state.enemies[2].set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
+    g_state.enemies[2].m_texture_id = Utility::load_texture(SPIKY_SPRITESHEET_FILEPATH);
+    g_state.enemies[2].set_entity_type(ENEMY);
+    g_state.enemies[2].set_enemy_type(SPIKY);
+    g_state.enemies[2].m_animation[g_state.enemies[2].LEFT] = new int[1] {0};
+    g_state.enemies[2].m_animation[g_state.enemies[2].RIGHT] = new int[1] {1};
+    g_state.enemies[2].m_animation_indices = g_state.enemies[2].m_animation[g_state.enemies[2].LEFT];
+    g_state.enemies[2].m_animation_time = 0.0f;
+    g_state.enemies[2].m_animation_frames = 1;
+    g_state.enemies[2].m_animation_index = 0;
+    g_state.enemies[2].m_animation_cols = 2;
+    g_state.enemies[2].m_animation_rows = 1;
  
 
     //// UI
@@ -313,14 +323,31 @@ void update()
 
     while (delta_time >= FIXED_TIMESTEP)
     {
-        g_state.player->update(FIXED_TIMESTEP, g_state.player, NULL, 0, g_state.map);
+        g_state.player->update(FIXED_TIMESTEP, g_state.player, g_state.enemies, 3, g_state.map);
         for (size_t i = 0; i < 3; i++) {
-            g_state.enemies[i]->update(FIXED_TIMESTEP, g_state.player, NULL, 0, g_state.map);
+            g_state.enemies[i].update(FIXED_TIMESTEP, g_state.player, NULL, 0, g_state.map);
         }
         delta_time -= FIXED_TIMESTEP;
     }
 
     g_accumulator = delta_time;
+
+    if (g_state.player->dead) {
+        go = true;
+    }
+
+    for (size_t i = 0; i < 3; i++) {
+        if (g_state.enemies[i].m_is_active) {
+            win = false;
+            break;
+        }
+        win = true;
+    }
+
+    if (win == true) {
+        go = true;
+    }
+    
 
 
 }
@@ -330,32 +357,34 @@ void render()
     glClear(GL_COLOR_BUFFER_BIT);
 
     // deactivate all of the platforms and player on game over
-   /* if (go) {
+    if (go) {
         g_state.player->deactivate();
-    }*/
+        
+    }
 
     // render everything except UI
+    else {
+        g_state.map->render(&g_program);
+        g_state.player->render(&g_program);
 
-    g_state.map->render(&g_program);
-    g_state.player->render(&g_program);
-   
-    for (size_t i = 0; i < 3; i++) {
-        g_state.enemies[i]->render(&g_program);
+        for (size_t i = 0; i < 3; i++) {
+            g_state.enemies[i].render(&g_program);
+        }
     }
+    
 
     
 
-    //// render UI elements based on win or lose
-    //if (win && go) {
-    //    g_state.ui->activate();
-    //    g_state.ui->m_texture_id = Utility::load_texture(WIN_SCREEN);
-    //    g_state.ui->render(&g_program);
-    //}
-    //else if (go && !win) {
-    //    g_state.ui->activate();
-    //    g_state.ui->m_texture_id = Utility::load_texture(LOSE_SCREEN);
-    //    g_state.ui->render(&g_program);
-    //}
+    // render UI elements based on win or lose
+    if (win && go) {
+        endscreen_text = "You Won!";
+        Utility::draw_text(&g_program, font_texture_id, endscreen_text, 0.5f, 0.000001f, ui_element_position);
+    }
+    else if (go && !win) {
+        endscreen_text = "You Lost!";
+        Utility::draw_text(&g_program, font_texture_id, endscreen_text, 0.5f, 0.000001f, ui_element_position);
+    }
+
 
     // Swap window
     SDL_GL_SwapWindow(g_display_window);
@@ -368,7 +397,7 @@ void shutdown()
     // delete everything 
     delete[] g_state.enemies;
     for (size_t i = 0; i < 3; i++) {
-        g_state.enemies[i] = nullptr;
+        g_state.enemies = nullptr;
     }
     delete g_state.map;
     g_state.map = nullptr;

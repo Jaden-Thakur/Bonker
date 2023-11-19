@@ -28,6 +28,7 @@
 
 const float GRAVITY = 1.0f;
 
+
 Entity::Entity() {
     // PHYSICS (GRAVITY) 
     m_position = glm::vec3(0.0f);
@@ -69,17 +70,17 @@ void Entity::activate_ai(Entity* player, float delta_time)
         if (glm::distance(m_position, player->get_position()) > 2.5) {
             set_mode(PATROL);
             ai_patrol(delta_time);
-            LOG("JUMPY CHILL!")
         }
         else {
             set_mode(AGGRO);
             ai_attack(player);
-            LOG("JUMPY MAD!")
         }
         break;
     case SPIKY:
+        m_can_damage = false;
         set_mode(IDLE);
         ai_idle(delta_time);
+        
         break;
 
     case DASHY:
@@ -87,13 +88,11 @@ void Entity::activate_ai(Entity* player, float delta_time)
             set_mode(PATROL);
             ai_patrol(delta_time);
             m_speed = 0.5f;
-            LOG("DASHY CHILL!")
         }
         else {
             set_mode(AGGRO);
             ai_attack(player);
             m_speed = 3.0f;
-            LOG("DASHY MAD!")
         }
         break;
     }
@@ -148,8 +147,12 @@ void Entity::ai_patrol(float delta_time) {
 
         }
         m_movement = glm::vec3(1.0f, 0.0f, 0.0f) * dir;
-        if (dir == 1) m_animation_indices = m_animation[LEFT];
-        else m_animation_indices = m_animation[RIGHT];
+        if (dir == 1) {
+            m_animation_indices = m_animation[LEFT];
+        }
+        else {
+            m_animation_indices = m_animation[RIGHT];
+        }
         timer += 2 * delta_time;
     }
 }
@@ -163,8 +166,15 @@ void Entity::ai_idle(float delta_time) {
 
         }
    
-        if (dir == 1) m_animation_indices = m_animation[LEFT];
-        else m_animation_indices = m_animation[RIGHT];
+        if (dir == 1) {
+            m_animation_indices = m_animation[LEFT];
+            m_can_damage = false;
+        }
+        else {
+            m_animation_indices = m_animation[RIGHT];
+            m_can_damage = true;
+        }
+
         timer += 2 * delta_time;
     }
 }
@@ -227,6 +237,7 @@ void Entity::update(float delta_time, Entity* player, Entity* collidable_entitie
 
         m_position.y += m_velocity.y * delta_time;
         check_collision_y(collidable_entities1, collidable_entity_count);
+        
         check_collision_y(map);
 
         m_position.x += m_velocity.x * delta_time;
@@ -238,6 +249,7 @@ void Entity::update(float delta_time, Entity* player, Entity* collidable_entitie
         }
 
         m_position += m_movement * delta_time;
+
 
         // ����� TRANSFORMATIONS ����� //
         m_model_matrix = glm::mat4(1.0f);
@@ -259,12 +271,17 @@ void const Entity::check_collision_y(Entity* collidable_entities, int collidable
                 m_position.y -= y_overlap;
                 m_velocity.y = 0;
                 m_collided_top = true;
+                if (collidable_entity->get_entity_type() == ENEMY && collidable_entity->m_can_damage) {
+                    dead = true;
+                }
             }
             else if (m_velocity.y < 0) {
                 m_position.y += y_overlap;
                 m_velocity.y = 0;
                 m_collided_bottom = true;
-
+                if (collidable_entity->get_entity_type() == ENEMY && collidable_entity->m_can_damage) {
+                    collidable_entity->deactivate();
+                }
             }
 
         }
@@ -287,14 +304,23 @@ void const Entity::check_collision_x(Entity* collidable_entities, int collidable
                 m_position.x -= x_overlap;
                 m_velocity.x = 0;
                 m_collided_right = true;
+                if (collidable_entity->get_entity_type() == ENEMY && collidable_entity->m_can_damage) {
+                    dead = true;
+                }
             }
             else if (m_velocity.x < 0) {
                 m_position.x += x_overlap;
                 m_velocity.x = 0;
                 m_collided_left = true;
+                if (collidable_entity->get_entity_type() == ENEMY && collidable_entity->m_can_damage) {
+                    dead = true;
+                }
             }
+  
 
         }
+
+       
     }
 }
 

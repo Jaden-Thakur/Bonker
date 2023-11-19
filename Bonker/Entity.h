@@ -7,7 +7,7 @@ enum AIMode { AGGRO, IDLE, PATROL };
 class Entity
 {
 private:
-	bool m_is_active = true;
+	
 
 	int* m_left = NULL,
 		* m_right = NULL;
@@ -36,6 +36,8 @@ private:
 
 public:
 
+	bool m_is_active = true;
+	bool dead;
 	bool m_is_jumping = false;
 	float m_jumping_power = 5.0f;
 
@@ -66,6 +68,8 @@ public:
 	void ai_attack(Entity* player);
 	void ai_patrol(float delta_time);
 	void ai_idle(float delta_time);
+
+	bool m_can_damage = true;
 
 	// PHYSICS COLLISIONS
 	bool m_collided_top = false;
