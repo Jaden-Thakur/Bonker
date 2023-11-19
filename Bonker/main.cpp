@@ -151,7 +151,7 @@ void initialise()
     g_state.player = new Entity();
     g_state.player->set_position(glm::vec3(0.0f, 0.0f, 0.0f));
     g_state.player->set_movement(glm::vec3(0.0f));
-    g_state.player->set_speed(1.0f);
+    g_state.player->set_speed(3.0f);
     g_state.player->set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
     g_state.player->m_texture_id = Utility::load_texture(PLAYER_SPRITESHEET_FILEPATH);
     g_state.player->set_entity_type(PLAYER);
@@ -168,7 +168,7 @@ void initialise()
     g_state.enemies[0] = new Entity();
     g_state.enemies[0]->set_position(glm::vec3(2.0f, 0.0f, 0.0f));
     g_state.enemies[0]->set_movement(glm::vec3(0.0f));
-    g_state.enemies[0]->set_speed(1.0f);
+    g_state.enemies[0]->set_speed(0.5f);
     g_state.enemies[0]->set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
     g_state.enemies[0]->m_texture_id = Utility::load_texture(JUMPY_SPRITESHEET_FILEPATH);
     g_state.enemies[0]->set_entity_type(ENEMY);
@@ -186,7 +186,7 @@ void initialise()
     g_state.enemies[1] = new Entity();
     g_state.enemies[1]->set_position(glm::vec3(4.0f, 0.0f, 0.0f));
     g_state.enemies[1]->set_movement(glm::vec3(0.0f));
-    g_state.enemies[1]->set_speed(1.0f);
+    g_state.enemies[1]->set_speed(0.5f);
     g_state.enemies[1]->set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
     g_state.enemies[1]->m_texture_id = Utility::load_texture(DASHY_SPRITESHEET_FILEPATH);
     g_state.enemies[1]->set_entity_type(ENEMY);
@@ -204,13 +204,13 @@ void initialise()
     g_state.enemies[2] = new Entity();
     g_state.enemies[2]->set_position(glm::vec3(6.0f, 0.0f, 0.0f));
     g_state.enemies[2]->set_movement(glm::vec3(0.0f));
-    g_state.enemies[2]->set_speed(1.0f);
+    g_state.enemies[2]->set_speed(0.0f);
     g_state.enemies[2]->set_acceleration(glm::vec3(0.0f, -4.905f, 0.0f));
     g_state.enemies[2]->m_texture_id = Utility::load_texture(SPIKY_SPRITESHEET_FILEPATH);
     g_state.enemies[2]->set_entity_type(ENEMY);
     g_state.enemies[2]->set_enemy_type(SPIKY);
-    g_state.enemies[2]->m_animation[g_state.enemies[2]->LEFT] = new int[1] { 0};
-    g_state.enemies[2]->m_animation[g_state.enemies[2]->RIGHT] = new int[1] { 1};
+    g_state.enemies[2]->m_animation[g_state.enemies[2]->LEFT] = new int[1] {0};
+    g_state.enemies[2]->m_animation[g_state.enemies[2]->RIGHT] = new int[1] {1};
     g_state.enemies[2]->m_animation_indices = g_state.enemies[2]->m_animation[g_state.enemies[2]->LEFT];
     g_state.enemies[2]->m_animation_time = 0.0f;
     g_state.enemies[2]->m_animation_frames = 1;
@@ -315,7 +315,7 @@ void update()
     {
         g_state.player->update(FIXED_TIMESTEP, g_state.player, NULL, 0, g_state.map);
         for (size_t i = 0; i < 3; i++) {
-            g_state.enemies[i]->update(FIXED_TIMESTEP, g_state.enemies[i], NULL, 0, g_state.map);
+            g_state.enemies[i]->update(FIXED_TIMESTEP, g_state.player, NULL, 0, g_state.map);
         }
         delta_time -= FIXED_TIMESTEP;
     }

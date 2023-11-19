@@ -42,8 +42,11 @@ Entity::Entity() {
 
 Entity::~Entity() {
     delete[] m_animation;
+    m_animation = nullptr;
     delete[] m_left;
+    m_left = nullptr;
     delete[] m_right;
+    m_right = nullptr;
 };
 
 void Entity::scale() {
@@ -58,27 +61,39 @@ void Entity::deactivate() {
     this->m_is_active = false;
 };
 
-void Entity::activate_ai(Entity* player) 
+void Entity::activate_ai(Entity* player, float delta_time) 
 {
     switch (m_enemy_type) 
     {
     case JUMPY:
-        if (glm::distance(m_position, player->get_position()) > 5.0) {
-            this->set_mode(PATROL);
+        if (glm::distance(m_position, player->get_position()) > 2.5) {
+            set_mode(PATROL);
+            ai_patrol(delta_time);
+            LOG("JUMPY CHILL!")
         }
         else {
-            this->set_mode(AGGRO);
+            set_mode(AGGRO);
+            ai_attack(player);
+            LOG("JUMPY MAD!")
         }
         break;
     case SPIKY:
-        this->set_mode(IDLE);
+        set_mode(IDLE);
+        ai_idle(delta_time);
         break;
+
     case DASHY:
-        if (glm::distance(m_position, player->get_position()) > 5.0) {
-            this->set_mode(PATROL);
+        if (glm::distance(m_position, player->get_position()) > 2.5) {
+            set_mode(PATROL);
+            ai_patrol(delta_time);
+            m_speed = 0.5f;
+            LOG("DASHY CHILL!")
         }
         else {
-            this->set_mode(AGGRO);
+            set_mode(AGGRO);
+            ai_attack(player);
+            m_speed = 3.0f;
+            LOG("DASHY MAD!")
         }
         break;
     }
@@ -87,34 +102,81 @@ void Entity::activate_ai(Entity* player)
 void Entity::ai_attack(Entity* player) {
     switch (m_ai_mode) {
     case AGGRO:
+        if (m_enemy_type == DASHY) {
+            if (m_position.x > player->get_position().x + player->get_width()) {
+                m_movement = glm::vec3(-m_speed, 0.0f, 0.0f);
+                m_animation_indices = m_animation[RIGHT];
+            }
+            else if (m_position.x < player->get_position().x - player->get_width()) {
+                m_movement = glm::vec3(m_speed, 0.0f, 0.0f);
+                m_animation_indices = m_animation[LEFT];
+            }
+        }
+
         if (m_enemy_type == JUMPY && m_collided_bottom) {
+            m_is_jumping = true;
             if (m_position.x > player->get_position().x) {
-                m_movement = glm::vec3(-1.0f, 1.0f, 0.0f);
+                m_movement = glm::vec3(-m_speed, 0.0f, 0.0f);
+                m_animation_indices = m_animation[RIGHT];
             }
             else {
-                m_movement = glm::vec3(1.0f, 1.0f, 0.0f);
+                m_movement = glm::vec3(1.0f, 0.0f, 0.0f);
+                m_animation_indices = m_animation[LEFT];
             }
         }
         else if (m_enemy_type == JUMPY && !m_collided_bottom) {
             if (m_position.x > player->get_position().x) {
-                m_movement = glm::vec3(-1.0f, 0.0f, 0.0f);
+                m_movement = glm::vec3(-m_speed, 0.0f, 0.0f);
+                m_animation_indices = m_animation[RIGHT];
             }
             else {
-                m_movement = glm::vec3(1.0f, 0.0f, 0.0f);
+                m_movement = glm::vec3(m_speed, 0.0f, 0.0f);
+                m_animation_indices = m_animation[LEFT];
             }
         }
         break;
-
     }
 }
 
 
+void Entity::ai_patrol(float delta_time) {
+    switch (m_ai_mode) {
+    case PATROL:
+        if (timer > 5) {
+            dir = -dir;
+            timer = 0;
+
+        }
+        m_movement = glm::vec3(1.0f, 0.0f, 0.0f) * dir;
+        if (dir == 1) m_animation_indices = m_animation[LEFT];
+        else m_animation_indices = m_animation[RIGHT];
+        timer += 2 * delta_time;
+    }
+}
+
+void Entity::ai_idle(float delta_time) {
+    switch (m_ai_mode) {
+    case IDLE:
+        if (timer > 5) {
+            dir = -dir;
+            timer = 0;
+
+        }
+   
+        if (dir == 1) m_animation_indices = m_animation[LEFT];
+        else m_animation_indices = m_animation[RIGHT];
+        timer += 2 * delta_time;
+    }
+}
 
 void Entity::update(float delta_time, Entity* player, Entity* collidable_entities1, int collidable_entity_count, Map* map)
 {
     if (!m_is_active) return;
 
-
+    if (this->m_entity_type == ENEMY) {
+        this->activate_ai(player, delta_time);
+    }
+    
     if (m_animation_indices != NULL)
     {
         if (glm::length(m_movement) != 0)
@@ -135,7 +197,13 @@ void Entity::update(float delta_time, Entity* player, Entity* collidable_entitie
         }
 
         if (m_entity_type == ENEMY) {
-            activate_ai(player);
+            activate_ai(player, delta_time);
+        }
+
+       
+
+        if (m_enemy_type == DASHY) {
+            
         }
 
         if (m_is_jumping)
@@ -157,19 +225,19 @@ void Entity::update(float delta_time, Entity* player, Entity* collidable_entitie
         m_velocity.y -= GRAVITY * delta_time;
 
 
-
         m_position.y += m_velocity.y * delta_time;
         check_collision_y(collidable_entities1, collidable_entity_count);
-        //check_collision_y(map);
+        check_collision_y(map);
 
         m_position.x += m_velocity.x * delta_time;
         check_collision_x(collidable_entities1, collidable_entity_count);
-        //check_collision_x(map);
+        check_collision_x(map);
 
         if (m_collided_bottom) {
             m_acceleration.x = 0;
         }
 
+        m_position += m_movement * delta_time;
 
         // ����� TRANSFORMATIONS ����� //
         m_model_matrix = glm::mat4(1.0f);
@@ -268,7 +336,6 @@ void const Entity::check_collision_y(Map* map)
     // And the bottom three points
     if (map->is_solid(bottom, &penetration_x, &penetration_y) && m_velocity.y < 0)
     {
-        LOG(map->tile)
         m_position.y += penetration_y;
         m_velocity.y = 0;
         m_collided_bottom = true;

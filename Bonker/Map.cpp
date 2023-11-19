@@ -22,6 +22,7 @@ void Map::build()
     {
         for (int x = 0; x < m_width; x++) {
             int tile = m_level_data[y * m_width + x];
+            l_data.push_back(tile);
             if (tile == 0) continue;
 
             float u = (float)(tile % m_tile_count_x) / (float)m_tile_count_x;
@@ -93,9 +94,8 @@ bool Map::is_solid(glm::vec3 position, float* penetration_x, float* penetration_
     if (tile_x < 0 || tile_x >= m_width) return false;
     if (tile_y < 0 || tile_y >= m_height) return false;
 
-    tile = m_level_data[(tile_y * m_width) + tile_x];
-
-    if (tile == 0) return false;
+    int tile = l_data[(tile_y * m_width) + tile_x];
+    if (tile == 0 || tile == 3 || tile == 4 || tile == 5 || tile == 6) return false;
 
     float tile_center_x = (tile_x * m_tile_size);
     float tile_center_y = -(tile_y * m_tile_size);

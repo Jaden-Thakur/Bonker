@@ -12,6 +12,7 @@
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
+#include "vector"
 
 class Map {
 private:
@@ -25,14 +26,13 @@ private:
     int   m_tile_count_x;
     int   m_tile_count_y;
 
+    std::vector<int> l_data;
     std::vector<float> m_vertices;
     std::vector<float> m_texture_coordinates;
 
     float m_left_bound, m_right_bound, m_top_bound, m_bottom_bound;
 
 public:
-
-    int tile;
     Map(int width, int height, unsigned int* level_data, GLuint texture_id, float tile_size, int
         tile_count_x, int tile_count_y);
 

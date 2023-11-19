@@ -1,3 +1,3 @@
-﻿  main.cpp
-C:\Users\drago\source\repos\Bonker\Bonker\main.cpp(369,5): warning C4154: deletion of an array expression; conversion to pointer supplied
+﻿  Entity.cpp
+C:\Users\drago\source\repos\Bonker\Bonker\Entity.h(30,18): warning C4305: 'initializing': truncation from 'double' to 'float'
   Bonker.vcxproj -> C:\Users\drago\source\repos\Bonker\Bonker\Debug\Bonker.exe

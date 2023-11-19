@@ -27,7 +27,7 @@ private:
 
 
 
-	float m_width = 1;
+	float m_width = 0.8;
 	float m_height = 1;
 
 	EntityType m_entity_type;
@@ -37,7 +37,10 @@ private:
 public:
 
 	bool m_is_jumping = false;
-	float m_jumping_power = 2.0f;
+	float m_jumping_power = 5.0f;
+
+	float timer = 0.0f;
+	float dir = 1.0f;
 
 	// ————— STATIC VARIABLES ————— //
 	static const int SECONDS_PER_FRAME = 4;
@@ -59,8 +62,10 @@ public:
 	int* m_animation_indices = NULL;
 	float   m_animation_time = 0.0f;
 
-	void activate_ai(Entity* player);
+	void activate_ai(Entity* player, float delta_time);
 	void ai_attack(Entity* player);
+	void ai_patrol(float delta_time);
+	void ai_idle(float delta_time);
 
 	// PHYSICS COLLISIONS
 	bool m_collided_top = false;
@@ -87,8 +92,8 @@ public:
 	void const check_collision_y(Map* map);
 	void const check_collision_x(Map* map);
 
-	void move_left() { m_movement.x = -1.0f; };
-	void move_right() { m_movement.x = 1.0f; };
+	void move_left() { m_movement.x = -m_speed; };
+	void move_right() { m_movement.x = m_speed; };
 
 	void rotate(float angle);
 
